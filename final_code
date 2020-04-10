@@ -1,0 +1,21 @@
+#STA5703 Final
+#Spring 2020
+#Cat Baker & Darshay Blount
+
+#Download PHY_TRAIN.csv from webcourses
+
+
+# Import modules
+import numpy as np
+import pandas as pd
+
+# Import the data
+df = pd.read_csv('/Users/catbaker3/Desktop/PHY_TRAIN.csv')
+
+# Take a peek
+df.head()
+df.describe(include= 'all')
+
+# Print column names
+for col in df.columns:
+    print(col)
