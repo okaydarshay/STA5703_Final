@@ -8,14 +8,75 @@
 # Import modules
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split 
+import matplotlib as mpl
+import seaborn as sns
+from scipy.stats import norm, skew
+import matplotlib.pyplot as plt
+%matplotlib inline
+from sklearn.impute import MissingIndicator
 
 # Import the data
 df = pd.read_csv('/Users/catbaker3/Desktop/PHY_TRAIN.csv')
 
 # Take a peek
+df.info()
 df.head()
 df.describe(include= 'all')
+df['target'].describe()
 
 # Print column names
 for col in df.columns:
     print(col)
+
+## Add other descriptive stats and plots   
+    
+
+# Identify the target var
+x = df.iloc[:, 2:80]
+y = df.iloc[:, 1]
+
+x_train, x_test, y_train, y_test = train_test_split(df, x, y, test_size = .30)
+
+# Step 2
+# Create missing value indicators
+indicator = MissingIndicator()
+
+
+
+
+# Step 3
+# Missing value imputation
+
+
+
+
+
+# Step 4
+# Transformation of selected variables (optional since we didn't take data prep)
+
+
+
+# Step 5
+# 1. Build a logistic regression model without interaction terms
+
+
+# 2. Build another logistic regression with at least three two-way interactions
+
+
+# 3. Build a model using random forest
+
+
+# 4. Build a model using gradient boosting
+
+
+
+
+
+
+
+
+
+
+
+
