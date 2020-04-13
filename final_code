@@ -14,7 +14,9 @@ import seaborn as sns
 from scipy.stats import norm, skew
 import matplotlib.pyplot as plt
 %matplotlib inline
-from sklearn.impute import MissingIndicator
+from sklearn.impute import MissingIndicator, SimpleImputer, KNNImputer
+import scipy.sparse as sp
+from sklearn.linear_model import LogisticRegression
 
 # Import the data
 df = pd.read_csv('/Users/catbaker3/Desktop/PHY_TRAIN.csv')
@@ -24,43 +26,78 @@ df.info()
 df.head()
 df.describe(include= 'all')
 df['target'].describe()
+sns.countplot(x='target', data=df) #binary dist
 
 # Print column names
 for col in df.columns:
     print(col)
-
-## Add other descriptive stats and plots   
     
+# Heatmap of missing values
+plt.subplots(figsize=(10,7))
+sns.heatmap(df.isnull(), yticklabels=False, cbar=False)
 
-# Identify the target var
-x = df.iloc[:, 2:80]
-y = df.iloc[:, 1]
+# Look at exactly which columns have missing data
+all_null = df.isnull().sum()
 
-x_train, x_test, y_train, y_test = train_test_split(df, x, y, test_size = .30)
 
 # Step 2: Create missing value indicators
-# Replace missing value int with 'NA'
-# Cols 22,23,24,46,47,48 
-# Cols 31, 57 
-if df.all == 999:
-    df.replace(to_replace=999, value="NA")
-if df.all == 9999:
-    df.replace(to_replace=9999, value="NA")
+df['ST_NUM'].fillna(125, inplace=True)
+
+#if df.all == 'NaN':
+#    df.replace(to_replace='NaN', value="NA")
+#if df.all == 'NaN':
+#    df.replace(to_replace='NaN', value="NA")
 
 # Step 3: Missing value imputation
-imputer = KNNImputer(n_neighbors=2, weights="uniform")
-imputer.fit_transform(df)
+# Find mean for each col with missing values
+mean_20 = df['feat20'].mean()
+df['feat20'].fillna(value=mean_20, inplace=True)
 
+mean_21 = df['feat21'].mean()
+df['feat21'].fillna(value=mean_21, inplace=True)
 
+mean_22 = df['feat22'].mean()
+df['feat22'].fillna(value=mean_22, inplace=True)
 
-# Step 4
-# Transformation of selected variables (optional since we didn't take data prep)
+mean_29 = df['feat29'].mean()
+df['feat29'].fillna(value=mean_29, inplace=True)
 
+mean_44 = df['feat44'].mean()
+df['feat44'].fillna(value=mean_44, inplace=True)
 
+mean_45 = df['feat45'].mean()
+df['feat45'].fillna(value=mean_45, inplace=True)
+
+mean_46 = df['feat46'].mean()
+df['feat46'].fillna(value=mean_46, inplace=True)
+
+mean_55 = df['feat55'].mean()
+df['feat55'].fillna(value=mean_55, inplace=True)
+
+#Check to make sure there aren't any more missing vals
+all_null = df.isnull().sum()
+
+# Step 4: Transformation of selected variables (optional since we didn't take data prep)
 
 # Step 5
 # 1. Build a logistic regression model without interaction terms
+# Identify the target var
+df.drop('exampleid', axis=1)
+x = df.drop('target', axis=1)
+y = df['target']
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = .30)
 
+# Build the model 
+from sklearn.linear_model import LogisticRegression
+logmodel = LogisticRegression()
+logmodel.fit(x_train, y_train)
+predictions = logmodel.predict(x_test)
+
+# Evaluate the model
+from sklearn.metrics import classification_report
+print(classification_report(y_test, predictions))
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_test, predictions)
 
 # 2. Build another logistic regression with at least three two-way interactions
 
@@ -69,9 +106,6 @@ imputer.fit_transform(df)
 
 
 # 4. Build a model using gradient boosting
-
-
-
 
 
 
