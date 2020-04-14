@@ -40,13 +40,11 @@ sns.heatmap(df.isnull(), yticklabels=False, cbar=False)
 all_null = df.isnull().sum()
 
 
-# Step 2: Create missing value indicators
-df['ST_NUM'].fillna(125, inplace=True)
-
-#if df.all == 'NaN':
-#    df.replace(to_replace='NaN', value="NA")
-#if df.all == 'NaN':
-#    df.replace(to_replace='NaN', value="NA")
+# Step 2: Create binary missing value indicators
+# where missing = 1 and present = 0
+indicator = MissingIndicator()
+indicator.fit(df.all)
+#need to reshape
 
 # Step 3: Missing value imputation
 # Find mean for each col with missing values
