@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 from sklearn.impute import MissingIndicator, SimpleImputer, KNNImputer
 import scipy.sparse as sp
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.pipeline import Pipeline, make_pipeline
 
 # Import the data
 df = pd.read_csv('/Users/catbaker3/Desktop/PHY_TRAIN.csv')
@@ -43,7 +45,6 @@ all_null = df.isnull().sum()
 # Step 2: Create binary missing value indicators
 # where missing = 1 and present = 0
 indicator = MissingIndicator()
-indicator.fit(df.all)
 #need to reshape
 
 # Step 3: Missing value imputation
@@ -98,13 +99,15 @@ from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, predictions)
 
 # 2. Build another logistic regression with at least three two-way interactions
-
+poly = PolynomialFeatures(degree=2)
+model = LogisticRegression(multi_class='multinomial')
+model = make_pipeline(poly, model)
+model.fit(x_train, y_train)
 
 # 3. Build a model using random forest
 
 
 # 4. Build a model using gradient boosting
-
 
 
 
