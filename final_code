@@ -19,6 +19,7 @@ import scipy.sparse as sp
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.ensemble import RandomForestClassifier
 
 # Import the data
 df = pd.read_csv('/Users/catbaker3/Desktop/PHY_TRAIN.csv')
@@ -105,6 +106,15 @@ model = make_pipeline(poly, model)
 model.fit(x_train, y_train)
 
 # 3. Build a model using random forest
+rfc = RandomForestClassifier(n_estimators=100)
+
+# Fit the model
+rfc.fit(x_train, y_train)
+rfc_pred = rfc.predict(x_test)
+
+# Print confusion matrix and classification report
+print(confusion_matrix(y_test,rfc_pred))
+print(classification_report(y_test,rfc_pred))
 
 
 # 4. Build a model using gradient boosting
