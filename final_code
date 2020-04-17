@@ -118,8 +118,26 @@ print(classification_report(y_test,rfc_pred))
 
 
 # 4. Build a model using gradient boosting
+from sklearn.ensemble import GradientBoostingClassifier
+lr_list = [0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1] #different learning rates
+for learning_rate in lr_list:
+    gb_clf = GradientBoostingClassifier(n_estimators=200, learning_rate=learning_rate, max_features=2, max_depth=2, random_state=0)
+    gb_clf.fit(x_train, y_train)
+    
+    print("Learning rate: ", learning_rate)
+    print("Accuracy score (training): {0:.3f}".format(gb_clf.score(x_train, y_train)))
+    print("Accuracy score (validation): {0:.3f}".format(gb_clf.score(x_test, y_test)))
+    
+#Using 0.5 as learning rate
+gb_clf2 = GradientBoostingClassifier(n_estimators=200, learning_rate=0.5, max_features=2, max_depth=2, random_state=0)
+gb_clf2.fit(x_train, y_train)
+predictions = gb_clf2.predict(x_test)
 
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, predictions))
 
+print("Classification Report")
+print(classification_report(y_test, predictions))
 
 
 
